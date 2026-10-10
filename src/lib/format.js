@@ -27,3 +27,8 @@ export function changeInfo(change) {
     return { symbol: "▼", text, cls: "text-red-700 bg-red-100" };
   return { symbol: "—", text, cls: "text-gray-600 bg-gray-100" };
 }
+
+export const num = (n) =>
+  Number.isInteger(n)
+    ? bn(n)
+    : bn(n, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
