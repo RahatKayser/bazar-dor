@@ -1,10 +1,20 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import SocialButtons from "@/components/SocialButtons";
-import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+
+
+function getRedirectTarget() {
+  if (typeof window === "undefined") return null;
+  const target = new URLSearchParams(window.location.search).get("redirect");
+
+  return target && target.startsWith("/") && !target.startsWith("//")
+    ? target
+    : null;
+}
 
 export default function SignInPage() {
   const router = useRouter();
@@ -12,38 +22,58 @@ export default function SignInPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+
+  useEffect(() => {
+    if (getRedirectTarget()) {
+      toast("Please sign in to view this page.", {
+        id: "auth-required",
+        icon: "🔒",
+      });
+    }
+  }, []);
+
   async function handleSubmit(e) {
     e.preventDefault();
     if (!email.trim() || !password) {
-      toast.error("Provide Email and Password");
+      toast.error("Please enter your email and password.");
       return;
     }
 
-        setLoading(true);
+    setLoading(true);
     try {
       const { error } = await authClient.signIn.email({
         email: email.trim(),
         password,
       });
 
+      // if (error) {
+      //   toast.error("Incorrect email or password.");
+      //   return;
+      // }
+
       if (error) {
-        toast.error("Wrong email or password");
+        // console.error("signin error:", error);
+        toast.error(
+          error.status === 401 || error.code === "INVALID_EMAIL_OR_PASSWORD"
+            ? "Incorrect email or password."
+            : "Sign in failed. Please try again."
+        );
         return;
       }
 
-      toast.success("Sign In successful");
-      router.push("/");
+      toast.success("Signed in successfully.");
+      router.push(getRedirectTarget() ?? "/");
       router.refresh();
     } catch {
-      toast.error("Connection error, try again");
+      toast.error("Connection error. Please try again.");
     } finally {
       setLoading(false);
     }
   }
 
   function handleSocial(provider) {
-    
-    toast(`${provider} লগইন এখনো সংযুক্ত করা হয়নি।`);
+
+    toast(`${provider} login is not connected yet.`);
   }
 
   return (
@@ -63,7 +93,7 @@ export default function SignInPage() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder=""
+            placeholder="you@example.com"
             className="input input-bordered w-full bg-white"
           />
         </div>
@@ -77,7 +107,7 @@ export default function SignInPage() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder=""
+            placeholder="কমপক্ষে ৮ অক্ষর"
             className="input input-bordered w-full bg-white"
           />
         </div>

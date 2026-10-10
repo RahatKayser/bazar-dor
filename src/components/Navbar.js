@@ -46,11 +46,11 @@ export default function Navbar({ categories }) {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          toast.success("Signout successful");
+          toast.success("Signed out successfully.");
           router.push("/");
           router.refresh();
         },
-        onError: () => toast.error("Signout failed"),
+        onError: () => toast.error("Could not sign out."),
       },
     });
   }

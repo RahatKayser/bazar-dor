@@ -18,23 +18,17 @@ export default function SignUpPage() {
     e.preventDefault();
 
     if (!name.trim() || !email.trim() || !password || !confirm) {
-      toast.error("Fill-up all the atributes");
+      toast.error("Please fill in all fields.");
       return;
     }
     if (password.length < 8) {
-      toast.error("Password should be at least 8 characters");
+      toast.error("Password must be at least 8 characters.");
       return;
     }
     if (password !== confirm) {
-      toast.error("Invalid Password");
+      toast.error("Passwords do not match.");
       return;
     }
-
-    // setLoading(true);
-
-    // toast("রেজিস্ট্রেশন এখনো সংযুক্ত করা হয়নি।");
-    // setLoading(false);
-
 
     setLoading(true);
     try {
@@ -48,16 +42,16 @@ export default function SignUpPage() {
         const msg = String(error.message || "").toLowerCase();
         toast.error(
           msg.includes("exist")
-            ? "এই ইমেইল দিয়ে আগেই অ্যাকাউন্ট খোলা হয়েছে।"
-            : "রেজিস্ট্রেশন করা যায়নি। আবার চেষ্টা করুন।"
+            ? "An account with this email already exists."
+            : "Registration failed. Please try again."
         );
         return;
       }
 
-      toast.success("অ্যাকাউন্ট তৈরি হয়েছে! এখন সাইন ইন করুন।");
+      toast.success("Account created! Please sign in.");
       router.push("/signin");
     } catch {
-      toast.error("সংযোগে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      toast.error("Connection error. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -65,7 +59,8 @@ export default function SignUpPage() {
 
   function handleSocial(provider) {
 
-    toast(`${provider} লগইন এখনো সংযুক্ত করা হয়নি।`);
+    toast(`${provider} login is not connected yet.`);
+    
   }
 
   return (

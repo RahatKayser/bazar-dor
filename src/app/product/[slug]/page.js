@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { headers } from "next/headers";
+import { notFound, redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
 import { getProductBySlug } from "@/lib/api";
 import { bn, changeInfo, num, unitBn } from "@/lib/format";
 
@@ -15,6 +17,11 @@ function Stat({ label, value, note }) {
 
 export default async function ProductPage({ params }) {
   const { slug } = await params;
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) {
+    redirect(`/signin?redirect=${encodeURIComponent(`/product/${slug}`)}`);
+  }
+
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
