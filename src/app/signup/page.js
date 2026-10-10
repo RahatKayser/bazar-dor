@@ -57,10 +57,22 @@ export default function SignUpPage() {
     }
   }
 
-  function handleSocial(provider) {
+  // function handleSocial(provider) {
 
-    toast(`${provider} login is not connected yet.`);
-    
+  //   toast(`${provider} login is not connected yet.`);
+
+  // }
+
+  async function handleSocial(provider) {
+    setLoading(true);
+    const { error } = await authClient.signIn.social({
+      provider,
+      callbackURL: "/",
+    });
+    if (error) {
+      toast.error("Could not sign in. Please try again.");
+      setLoading(false);
+    }
   }
 
   return (
