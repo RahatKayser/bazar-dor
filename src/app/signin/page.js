@@ -3,8 +3,11 @@ import { useState } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import SocialButtons from "@/components/SocialButtons";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 export default function SignInPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,10 +19,26 @@ export default function SignInPage() {
       return;
     }
 
-    setLoading(true);
-    
-    toast("লগইন এখনো সংযুক্ত করা হয়নি।");
-    setLoading(false);
+        setLoading(true);
+    try {
+      const { error } = await authClient.signIn.email({
+        email: email.trim(),
+        password,
+      });
+
+      if (error) {
+        toast.error("Wrong email or password");
+        return;
+      }
+
+      toast.success("Sign In successful");
+      router.push("/");
+      router.refresh();
+    } catch {
+      toast.error("Connection error, try again");
+    } finally {
+      setLoading(false);
+    }
   }
 
   function handleSocial(provider) {

@@ -3,8 +3,11 @@ import { useState } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import SocialButtons from "@/components/SocialButtons";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 export default function SignUpPage() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,14 +30,41 @@ export default function SignUpPage() {
       return;
     }
 
+    // setLoading(true);
+
+    // toast("রেজিস্ট্রেশন এখনো সংযুক্ত করা হয়নি।");
+    // setLoading(false);
+
+
     setLoading(true);
-    
-    toast("রেজিস্ট্রেশন এখনো সংযুক্ত করা হয়নি।");
-    setLoading(false);
+    try {
+      const { error } = await authClient.signUp.email({
+        name: name.trim(),
+        email: email.trim(),
+        password,
+      });
+
+      if (error) {
+        const msg = String(error.message || "").toLowerCase();
+        toast.error(
+          msg.includes("exist")
+            ? "এই ইমেইল দিয়ে আগেই অ্যাকাউন্ট খোলা হয়েছে।"
+            : "রেজিস্ট্রেশন করা যায়নি। আবার চেষ্টা করুন।"
+        );
+        return;
+      }
+
+      toast.success("অ্যাকাউন্ট তৈরি হয়েছে! এখন সাইন ইন করুন।");
+      router.push("/signin");
+    } catch {
+      toast.error("সংযোগে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+    } finally {
+      setLoading(false);
+    }
   }
 
   function handleSocial(provider) {
-    
+
     toast(`${provider} লগইন এখনো সংযুক্ত করা হয়নি।`);
   }
 
