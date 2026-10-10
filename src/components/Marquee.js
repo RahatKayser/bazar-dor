@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { bn, changeInfo, unitBn } from "@/lib/format";
 
 export default function Marquee({ products }) {
@@ -13,9 +14,10 @@ export default function Marquee({ products }) {
           ? "text-red-300"
           : "text-gray-300";
       return (
-        <span
+        <Link
           key={`${prefix}-${p.id}`}
-          className="flex items-center gap-2 whitespace-nowrap px-5 text-sm"
+          href={`/product/${p.slug}`}
+          className="flex items-center gap-2 whitespace-nowrap px-5 text-sm hover:bg-green-800"
         >
           <span>{p.image}</span>
           <span>{p.nameBn}</span>
@@ -25,7 +27,7 @@ export default function Marquee({ products }) {
           <span className={color}>
             {c.symbol} {c.text}
           </span>
-        </span>
+        </Link>
       );
     });
 
