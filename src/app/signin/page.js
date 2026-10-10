@@ -105,7 +105,7 @@ export default function SignInPage() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
+            // placeholder=""
             className="input input-bordered w-full bg-white"
           />
         </div>
@@ -119,7 +119,7 @@ export default function SignInPage() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="কমপক্ষে ৮ অক্ষর"
+            // placeholder=""
             className="input input-bordered w-full bg-white"
           />
         </div>
