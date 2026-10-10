@@ -1,8 +1,8 @@
 # Bazar Dor (বাজার দর)
 
-A Bangla web app that shows today's prices of everyday essentials across
-12 markets in Bangladesh, with price changes, market-wise breakdowns and
-authentication.
+## Description
+
+A web app that shows today's prices of everyday essentials across 12 markets in Bangladesh, with price changes,market-wise breakdowns and authentication.
 
 
 ## Features
