@@ -1,5 +1,6 @@
 # Bazar Dor (বাজার দর)
 
+
 ## Description
 
 A web app that shows today's prices of everyday essentials across 12 markets in Bangladesh, with price changes,market-wise breakdowns and authentication.
@@ -19,6 +20,7 @@ A web app that shows today's prices of everyday essentials across 12 markets in 
 5. **Profile management** — view account details and update your name
    from a dedicated update page.
 
+
 ## Tech stack
 
 - Next.js (App Router), React, Tailwind CSS, daisyUI
@@ -26,3 +28,7 @@ A web app that shows today's prices of everyday essentials across 12 markets in 
 - react-hot-toast for notifications
 - Deployed on Vercel
 
+
+## Live Link
+
+https://bazar-dor-self-two.vercel.app/
